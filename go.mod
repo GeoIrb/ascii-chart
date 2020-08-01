@@ -1,3 +1,3 @@
-module github.com/GeoIrb/ascii-gistogramma
+module github.com/GeoIrb/ascii-chart
 
 go 1.14
