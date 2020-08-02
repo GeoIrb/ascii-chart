@@ -4,15 +4,15 @@ import (
 	"sync"
 )
 
-// Counter stores the number of used characters
+// Counter хранит количество использований каждого символа
 type Counter struct {
 	mutex     sync.Mutex
 	max       int
-	statistic map[string]int
+	statistic map[rune]int
 }
 
-// Add preserves symbol usage
-func (c *Counter) Add(symbol string) {
+// Add сохраняет использование symbol
+func (c *Counter) Add(symbol rune) {
 	c.mutex.Lock()
 	c.statistic[symbol]++
 	if c.max < c.statistic[symbol] {
@@ -21,12 +21,12 @@ func (c *Counter) Add(symbol string) {
 	c.mutex.Unlock()
 }
 
-// GetCount number of used characters
-func (c *Counter) GetCount(symbol string) int {
+// GetValue вохращает количество использования symbol
+func (c *Counter) GetValue(symbol rune) int {
 	return c.statistic[symbol]
 }
 
-// GetMax number of used characters
+// GetMax возращает максимальное число испольщования символа
 func (c *Counter) GetMax() int {
 	return c.max
 }
@@ -34,6 +34,6 @@ func (c *Counter) GetMax() int {
 // NewCounter ...
 func NewCounter() *Counter {
 	return &Counter{
-		statistic: make(map[string]int),
+		statistic: make(map[rune]int),
 	}
 }

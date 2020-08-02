@@ -7,9 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/GeoIrb/ascii-chart/pkg/chart"
-
 	"github.com/GeoIrb/ascii-chart/pkg/counter"
+	"github.com/GeoIrb/ascii-chart/pkg/grafic"
 )
 
 const (
@@ -39,16 +38,17 @@ func main() {
 	var s rune
 	for err != io.EOF {
 		s, _, err = r.ReadRune()
-		c5r.Add(string(s))
+		c5r.Add(s)
 	}
 
-	border := 0
-	c2t := chart.NewChart(
-		&border,
+	g4c := grafic.NewGrafic(
+		33,
 		256,
+		0,
 		150,
 		barChartLayout,
 		barCharPart,
 	)
-	c2t.Bar(c5r)
+	g4c.BarChart(c5r)
+
 }
