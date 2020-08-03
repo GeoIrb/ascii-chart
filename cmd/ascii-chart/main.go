@@ -20,8 +20,8 @@ const (
 	firstSymbol = '!'
 	lastSymbol  = '~'
 
-	min = 1
-	max = 200
+	max    = 150
+	border = 1
 )
 
 func main() {
@@ -51,8 +51,8 @@ func main() {
 	g4c := grafic.NewGrafic(
 		firstSymbol,
 		lastSymbol,
-		min,
 		max,
+		border,
 		barChartLayout,
 		barCharPart,
 	)

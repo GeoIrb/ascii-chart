@@ -13,8 +13,9 @@ type function interface {
 type Grafic struct {
 	minX int
 	maxX int
-	minY int
 	maxY int
+
+	border int
 
 	layout string
 	part   string
@@ -24,7 +25,7 @@ type Grafic struct {
 func (g *Grafic) BarChart(f function) {
 	max := f.GetMax()
 	for i := 33; i < g.maxX; i++ {
-		if count := f.GetValue(rune(i)); g.minY <= count {
+		if count := f.GetValue(rune(i)); g.border <= count {
 			scale := g.scale(count, max)
 			fmt.Printf(g.layout, string(i), g.line(scale), count)
 		}
@@ -46,8 +47,9 @@ func (g *Grafic) scale(size, max int) int {
 func NewGrafic(
 	minX int,
 	maxX int,
-	minY int,
 	maxY int,
+
+	border int,
 
 	layout string,
 	part string,
@@ -55,8 +57,9 @@ func NewGrafic(
 	return &Grafic{
 		minX: minX,
 		maxX: maxX,
-		minY: minY,
 		maxY: maxY,
+
+		border: border,
 
 		layout: layout,
 		part:   part,
