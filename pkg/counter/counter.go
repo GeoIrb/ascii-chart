@@ -9,12 +9,14 @@ type Counter struct {
 
 // Start запуск подсчета смиволов
 func (c *Counter) Start() {
-	for symbol := range c.symbolChan {
-		c.statistic[symbol]++
-		if c.statistic[symbol] > c.max {
-			c.max = c.statistic[symbol]
+	go func() {
+		for symbol := range c.symbolChan {
+			c.statistic[symbol]++
+			if c.statistic[symbol] > c.max {
+				c.max = c.statistic[symbol]
+			}
 		}
-	}
+	}()
 }
 
 // Stop остановка подсчета  символов

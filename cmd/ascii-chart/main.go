@@ -26,22 +26,19 @@ const (
 
 func main() {
 	testDir := defaultDir
-
 	if len(os.Args) > 1 {
 		testDir = os.Args[1]
 	}
 
+	c5r := counter.NewCounter()
+	c5r.Start()
+	defer c5r.Stop()
+
+	w4r := worker.NewWorker(c5r)
 	files, err := ioutil.ReadDir(testDir)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	c5r := counter.NewCounter()
-	go c5r.Start()
-	defer c5r.Stop()
-	w4r := worker.NewWorker(
-		c5r,
-	)
 
 	wg := &sync.WaitGroup{}
 	for _, file := range files {
