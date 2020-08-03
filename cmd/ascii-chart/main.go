@@ -6,11 +6,9 @@ import (
 	"os"
 	"sync"
 
-	"github.com/GeoIrb/ascii-chart/pkg/worker"
-
 	"github.com/GeoIrb/ascii-chart/pkg/counter"
-
 	"github.com/GeoIrb/ascii-chart/pkg/grafic"
+	"github.com/GeoIrb/ascii-chart/pkg/worker"
 )
 
 const (
@@ -42,6 +40,7 @@ func main() {
 	w4r := worker.NewWorker(
 		c5r,
 	)
+
 	wg := &sync.WaitGroup{}
 	for _, file := range files {
 		wg.Add(1)
