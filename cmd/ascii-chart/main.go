@@ -1,13 +1,15 @@
 package main
 
 import (
-	"bufio"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"sync"
+
+	"github.com/GeoIrb/ascii-chart/pkg/worker"
 
 	"github.com/GeoIrb/ascii-chart/pkg/counter"
+
 	"github.com/GeoIrb/ascii-chart/pkg/grafic"
 )
 
@@ -16,6 +18,12 @@ const (
 
 	barChartLayout = "\033[1;34m%s\033[0m\033[1;36m|\033[0m%s%d\n"
 	barCharPart    = "\033[1;31m|\033[0m"
+
+	firstSymbol = '!'
+	lastSymbol  = '~'
+
+	min = 1
+	max = 200
 )
 
 func main() {
@@ -30,25 +38,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fileName := testDir + "/" + files[1].Name()
-	f, _ := os.Open(fileName)
-	r := bufio.NewReader(f)
-
 	c5r := counter.NewCounter()
-	var s rune
-	for err != io.EOF {
-		s, _, err = r.ReadRune()
-		c5r.Add(s)
+	w4r := worker.NewWorker(
+		c5r,
+	)
+	wg := &sync.WaitGroup{}
+	for _, file := range files {
+		wg.Add(1)
+		go w4r.Start(wg, testDir+"/"+file.Name())
 	}
+	wg.Wait()
 
 	g4c := grafic.NewGrafic(
-		33,
-		256,
-		0,
-		150,
+		firstSymbol,
+		lastSymbol,
+		min,
+		max,
 		barChartLayout,
 		barCharPart,
 	)
 	g4c.BarChart(c5r)
-
 }
