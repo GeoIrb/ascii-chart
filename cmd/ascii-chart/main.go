@@ -37,6 +37,8 @@ func main() {
 	}
 
 	c5r := counter.NewCounter()
+	go c5r.Start()
+	defer c5r.Stop()
 	w4r := worker.NewWorker(
 		c5r,
 	)

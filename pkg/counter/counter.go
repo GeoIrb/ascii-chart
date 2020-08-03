@@ -1,24 +1,30 @@
 package counter
 
-import (
-	"sync"
-)
-
 // Counter хранит количество использований каждого символа
 type Counter struct {
-	mutex     sync.Mutex
-	max       int
-	statistic map[rune]int
+	statistic  map[rune]int
+	symbolChan chan rune
+	max        int
+}
+
+// Start запуск подсчета смиволов
+func (c *Counter) Start() {
+	for symbol := range c.symbolChan {
+		c.statistic[symbol]++
+		if c.statistic[symbol] > c.max {
+			c.max = c.statistic[symbol]
+		}
+	}
+}
+
+// Stop остановка подсчета  символов
+func (c *Counter) Stop() {
+	close(c.symbolChan)
 }
 
 // Add сохраняет использование symbol
 func (c *Counter) Add(symbol rune) {
-	c.mutex.Lock()
-	c.statistic[symbol]++
-	if c.max < c.statistic[symbol] {
-		c.max = c.statistic[symbol]
-	}
-	c.mutex.Unlock()
+	c.symbolChan <- symbol
 }
 
 // GetValue вохращает количество использования symbol
@@ -34,6 +40,7 @@ func (c *Counter) GetMax() int {
 // NewCounter ...
 func NewCounter() *Counter {
 	return &Counter{
-		statistic: make(map[rune]int),
+		statistic:  make(map[rune]int),
+		symbolChan: make(chan rune),
 	}
 }
