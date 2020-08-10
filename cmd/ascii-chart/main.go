@@ -4,10 +4,11 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime"
 	"sync"
 
 	"github.com/GeoIrb/ascii-chart/pkg/counter"
-	"github.com/GeoIrb/ascii-chart/pkg/grafic"
+	"github.com/GeoIrb/ascii-chart/pkg/graphic"
 	"github.com/GeoIrb/ascii-chart/pkg/worker"
 )
 
@@ -20,7 +21,7 @@ const (
 	firstSymbol = '!'
 	lastSymbol  = '~'
 
-	max    = 150
+	max    = 100
 	border = 1
 )
 
@@ -32,9 +33,9 @@ func main() {
 
 	c5r := counter.NewCounter()
 	c5r.Start()
-	defer c5r.Stop()
 
-	w4r := worker.NewWorker(c5r)
+	c := make(chan struct{}, runtime.NumCPU())
+	w4r := worker.NewWorker(c5r, c)
 	files, err := ioutil.ReadDir(testDir)
 	if err != nil {
 		log.Fatal(err)
@@ -42,12 +43,14 @@ func main() {
 
 	wg := &sync.WaitGroup{}
 	for _, file := range files {
+		c <- struct{}{}
 		wg.Add(1)
 		go w4r.Start(wg, testDir+"/"+file.Name())
 	}
 	wg.Wait()
+	c5r.Stop()
 
-	g4c := grafic.NewGrafic(
+	g4c := graphic.NewGraphic(
 		firstSymbol,
 		lastSymbol,
 		max,

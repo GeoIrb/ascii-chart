@@ -1,4 +1,4 @@
-package grafic
+package graphic
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ type function interface {
 	GetMax() int
 }
 
-// Grafic ...
-type Grafic struct {
+// Graphic ...
+type Graphic struct {
 	minX int
 	maxX int
 	maxY int
@@ -22,7 +22,7 @@ type Grafic struct {
 }
 
 // BarChart  вывод гистограммы
-func (g *Grafic) BarChart(f function) {
+func (g *Graphic) BarChart(f function) {
 	max := f.GetMax()
 	for i := 33; i < g.maxX; i++ {
 		if count := f.GetValue(rune(i)); g.border <= count {
@@ -32,19 +32,19 @@ func (g *Grafic) BarChart(f function) {
 	}
 }
 
-func (g *Grafic) line(length int) (line string) {
+func (g *Graphic) line(length int) (line string) {
 	for i := 0; i < length; i++ {
 		line += g.part
 	}
 	return
 }
 
-func (g *Grafic) scale(size, max int) int {
+func (g *Graphic) scale(size, max int) int {
 	return int(float64(size) / float64(max) * float64(g.maxY))
 }
 
-// NewGrafic ...
-func NewGrafic(
+// NewGraphic ...
+func NewGraphic(
 	minX int,
 	maxX int,
 	maxY int,
@@ -53,8 +53,8 @@ func NewGrafic(
 
 	layout string,
 	part string,
-) *Grafic {
-	return &Grafic{
+) *Graphic {
+	return &Graphic{
 		minX: minX,
 		maxX: maxX,
 		maxY: maxY,
